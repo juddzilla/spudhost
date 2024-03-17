@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ConvosMessagesConfig(AppConfig):
+class ConvoMessagesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'convos_messages'
+    name = 'convo_messages'
