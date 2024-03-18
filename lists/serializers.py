@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import Convos
+from .models import Lists
 
-class ConvosSerializer(serializers.ModelSerializer):
+class ListsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Convos
+        model = Lists
         fields = [
             "created_at",
             "deleted",
             "title",
-            "updated_at",
             "user",
             "uuid",
+            "updated_at",
         ] 
 
 

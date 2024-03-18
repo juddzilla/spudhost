@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import Convos
+from .models import GroupingItems
 
-class ConvosSerializer(serializers.ModelSerializer):
+class GroupingItemsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Convos
+        model = GroupingItems
         fields = [
             "created_at",
             "deleted",
-            "title",
             "updated_at",
-            "user",
-            "uuid",
+            "content_type",
+            "object_id",
+            "content_object",
         ] 
 
 

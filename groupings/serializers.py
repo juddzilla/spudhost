@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Convos
+from .models import Groupings
 
-class ConvosSerializer(serializers.ModelSerializer):
+class GroupingsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Convos
+        model = Groupings
         fields = [
             "created_at",
             "deleted",

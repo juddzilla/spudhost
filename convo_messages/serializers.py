@@ -1,16 +1,14 @@
 from rest_framework import serializers
-from .models import Convos
+from .models import ConvoMessages
 
-class ConvosSerializer(serializers.ModelSerializer):
+class ConvoMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Convos
+        model = ConvoMessages
         fields = [
+            "convo",
+            "body",
+            "type",
             "created_at",
-            "deleted",
-            "title",
-            "updated_at",
-            "user",
-            "uuid",
         ] 
 
 

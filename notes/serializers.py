@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from .models import Convos
+from .models import Notes
 
-class ConvosSerializer(serializers.ModelSerializer):
+class NotesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Convos
+        model = Notes
         fields = [
+            "body",
             "created_at",
             "deleted",
             "title",
