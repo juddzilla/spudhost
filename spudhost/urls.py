@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from token_auth import urls as token_auth_views
 from convos import urls as convos_urls
 from groupings import urls as groupings_urls
 from lists import urls as lists_urls
@@ -27,6 +28,7 @@ urlpatterns = [
     path('convos/', include(convos_urls)),    
     path('lists/', include(lists_urls)),
     path('notes/', include(notes_urls)),
+    path('auth/', include(token_auth_views)),
 ]
 
 

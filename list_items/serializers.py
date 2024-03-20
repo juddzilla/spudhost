@@ -5,6 +5,7 @@ class ListItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ListItems
         fields = [
+            "id",
             "body",
             "completed",
             "created_at",
@@ -13,6 +14,18 @@ class ListItemsSerializer(serializers.ModelSerializer):
             "order",
             "updated_at",
         ] 
+
+class ListItemUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListItems
+        fields = [            
+            "id",
+            "body",
+            "completed",
+            "deleted",
+            "list",
+            "order",
+        ]         
 
 
 # class CompletionPublicSerializer(serializers.ModelSerializer):

@@ -13,6 +13,14 @@ class GroupingsSerializer(serializers.ModelSerializer):
             "uuid",
         ] 
 
+    def to_representation(self, instance):
+        # Get the serialized data from the parent class
+        data = super().to_representation(instance)
+        
+        # Add a key to the serialized data
+        data['type'] = 'Collection'
+
+        return data
 
 # class CompletionPublicSerializer(serializers.ModelSerializer):
 #     class Meta:
