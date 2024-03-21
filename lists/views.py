@@ -49,8 +49,8 @@ class ListsView(APIView):
     
 
 class ListView(APIView):
-    def get(self, request, id, *args, **kwargs):        
-        list = get_user_list(request, id)
+    def get(self, request, uuid, *args, **kwargs):        
+        list = get_user_list(request, uuid)
         
         sort_direction = request.query_params.get('sortDirection')
         sort_property = request.query_params.get('sortProperty')
@@ -70,7 +70,6 @@ class ListView(APIView):
         if show_completed.lower() != 'null':
             filter_args['completed'] = show_completed.lower() == 'true'
         
-        
         items = list.listitems_set.filter(**filter_args).order_by(order_by)
         serialized = ListSerializer(list)
         
@@ -82,8 +81,8 @@ class ListView(APIView):
         return Response(response, status=status.HTTP_200_OK)
         # return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id, *args, **kwargs):
-        list = get_user_list(request, id)
+    def delete(self, request, uuid, *args, **kwargs):
+        list = get_user_list(request, uuid)
                 
         try:
             list.delete()
@@ -91,38 +90,34 @@ class ListView(APIView):
                 {'removed': True}, 
                 status=status.HTTP_202_ACCEPTED
             )
-        except Exception as e:
+        except Exception as e:            
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, id, *args, **kwargs):
-        list = get_user_list(request, id)
+    def post(self, request, uuid, *args, **kwargs):
+        list = get_user_list(request, uuid)
+        list_items = list.listitems_set.all().exclude(deleted=True)
         data = {            
             'body': request.data.get('body'),
             'list': list.id,
-            'order': request.data.get('order'),
+            'order': list_items.count()
         }
         
-        serialized = ListItemsSerializer(list, data=data, partial=True)    
+        serialized = ListItemsSerializer(data=data, partial=True)    
 
         if serialized.is_valid():
             serialized.save()
-            list_items = list.listitems_set.all().exclude(deleted=True)
-            # serialized_list_items = ListItemsSerializer(list_items, many=True)
-            # print(serialized_list_items.data)
             return Response(
                 {'results': serialized.data},
                 status=status.HTTP_201_CREATED
             )
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
             
-    def put(self, request, id, *args, **kwargs):
-        data = {
-            'uuid': uuid.uuid4(),
-            'title': request.data.get('title'),
-            'user': request.user.id,
+    def put(self, request, uuid, *args, **kwargs):
+        data = {            
+            'title': request.data.get('title'),            
         }
 
-        list = get_user_list(request, id)          
+        list = get_user_list(request, uuid)          
         serialized = ListUpdateSerializer(list, data=data, partial=True)        
 
         if serialized.is_valid():
@@ -133,9 +128,10 @@ class ListView(APIView):
 
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
 class ListItemsView(APIView):
-    def put(self, request, id, *args, **kwargs):
-        list = get_user_list(request, id)        
+    def put(self, request, uuid, *args, **kwargs):
+        list = get_user_list(request, uuid)        
         list_items_order = request.data.get('order')
 
         for index, item_id in enumerate(list_items_order):            
@@ -153,10 +149,10 @@ class ListItemsView(APIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 class ListItemView(APIView):
-    def put(self, request, id, item_id, *args, **kwargs):
-        list = get_user_list(request, id)
+    def put(self, request, uuid, item_id, *args, **kwargs):
+        list = get_user_list(request, uuid)
         list_item = list.listitems_set.get(id=item_id)
         serialized = ListItemUpdateSerializer(list_item, data=request.data, partial=True)
 
@@ -167,9 +163,10 @@ class ListItemView(APIView):
             }, status=status.HTTP_202_ACCEPTED)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    def delete(self, request, id, item_id, *args, **kwargs):
-        list = get_user_list(request, id)
-        list_item = ListItems.objects.get(list_id=list.id, id=item_id)
+    def delete(self, request, uuid, item_id, *args, **kwargs):
+        list = get_user_list(request, uuid)
+        
+        list_item = list.listitems_set.get(id=item_id)
         
         try:
             list_item.delete()

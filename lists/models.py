@@ -10,6 +10,6 @@ class Lists(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     deleted = models.BooleanField(default=False)
 
-    def delete(self, keep_parents=True):
+    def delete(self):
         self.deleted = True
-        self.save(keep_parents=keep_parents)
+        self.save()
