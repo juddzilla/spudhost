@@ -27,7 +27,7 @@ class RegisterView(ObtainAuthToken):
             'username': username,
             'password': request.data.get('password')
         }
-        print(json.dumps(data))
+
         if User.objects.filter(username=username).exists():
             return Response({
                 'error': f'Unable To Register {username}',
@@ -36,9 +36,10 @@ class RegisterView(ObtainAuthToken):
         
         User.objects.create_user(username=username, email=username, password=request.data.get('password'))
 
-        serializer = self.serializer_class(data=json.dumps(data),
-                                           context={'request': request})
-        print(serializer)
+        serializer = self.serializer_class(
+            data=json.dumps(data),
+            context={'request': request}
+        )        
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)

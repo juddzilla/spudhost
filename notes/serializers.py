@@ -22,6 +22,15 @@ class NotesSerializer(serializers.ModelSerializer):
         data['type'] = 'Note'
 
         return data
+    
+class NoteUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = [
+            "body",
+            "deleted",
+            "title",
+        ]     
 
 # class CompletionPublicSerializer(serializers.ModelSerializer):
 #     class Meta:
