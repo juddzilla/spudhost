@@ -12,8 +12,8 @@ class ConvoMessages(models.Model):
     body = models.TextField()
     type = models.CharField(choices = TypeEnum.choices, null = False)
     created_at = models.DateTimeField(auto_now_add = True)    
-    deleted = models.BooleanField()
+    deleted = models.BooleanField(default=False)
 
-    def delete(self, keep_parents=True):
+    def delete(self):
         self.deleted = True
-        self.save(keep_parents=keep_parents)
+        self.save()

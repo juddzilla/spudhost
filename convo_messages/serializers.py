@@ -6,9 +6,11 @@ class ConvoMessageSerializer(serializers.ModelSerializer):
         model = ConvoMessages
         fields = [
             "convo",
-            "body",
-            "type",
             "created_at",
+            "body",
+            "id",
+            "deleted",
+            "type",
         ] 
 
 
