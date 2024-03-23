@@ -12,6 +12,6 @@ class GroupingItems(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    def delete(self, keep_parents=True):
+    def delete(self):
         self.deleted = True
-        self.save(keep_parents=keep_parents)
+        self.save()

@@ -120,7 +120,11 @@ class ConvoView(APIView):
                     json.dumps({
                         'error_type': 'TypeError',
                         'error_message': str(e),
-                        # You can include additional information if needed
                     }),
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            
+class ConvoNoteView(APIView):
+    def post(self, request,uuid,  *args, **kwargs):
+        convo = get_user_convo(request, uuid)
+            
