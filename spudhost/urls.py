@@ -20,6 +20,7 @@ from token_auth import urls as token_auth_views
 from convos import urls as convos_urls
 from groupings import urls as groupings_urls
 from lists import urls as lists_urls
+from quick_queue import urls as queue_urls
 from notes import urls as notes_urls
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('lists/', include(lists_urls)),
     path('notes/', include(notes_urls)),
     path('auth/', include(token_auth_views)),
+    path('queue/', include(queue_urls)),
 ]
 
 

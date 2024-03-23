@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'groupings',
     'list_items',
     'lists',
+    'quick_queue',
     'notes',
 ]
 
