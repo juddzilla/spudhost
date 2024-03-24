@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Lists
+from list_items.models import ListItems
 # from list_items.models import ListItems
 
 class ListsSerializer(serializers.ModelSerializer):
@@ -20,6 +21,7 @@ class ListsSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'List'
+        data['children'] = instance.listitems_set.count()
 
         return data
 
