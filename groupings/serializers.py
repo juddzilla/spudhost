@@ -19,6 +19,7 @@ class GroupingsSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'Collection'
+        data['headline'] = instance.title
 
         return data
 

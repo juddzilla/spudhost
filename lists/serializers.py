@@ -21,7 +21,9 @@ class ListsSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'List'
-        data['children'] = instance.listitems_set.count()
+        data['children_count'] = instance.listitems_set.exclude(deleted=True).count()
+        data['headline'] = instance.title
+        data['subheadline'] = instance.title
 
         return data
 

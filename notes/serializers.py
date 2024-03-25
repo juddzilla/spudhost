@@ -20,6 +20,7 @@ class NotesSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'Note'
+        data['headline'] = instance.title
 
         return data
     

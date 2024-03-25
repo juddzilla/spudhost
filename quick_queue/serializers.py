@@ -19,6 +19,7 @@ class QuickQueueSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'Queue'
+        data['headline'] = instance.body
 
         return data
 

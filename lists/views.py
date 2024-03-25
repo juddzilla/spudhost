@@ -2,14 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import uuid
-import json
 
 from .models import Lists
 from .serializers import (ListSerializer, ListsSerializer, ListUpdateSerializer)
 
 from list_items.models import ListItems
 from list_items.serializers import (ListItemUpdateSerializer, ListItemsSerializer)
-# Create your views here.
 
 def get_user_list(request, uuid):
     return Lists.objects.get(user=request.user.id, uuid=uuid)
@@ -55,7 +53,7 @@ class ListView(APIView):
         sort_direction = request.query_params.get('sortDirection')
         sort_property = request.query_params.get('sortProperty')
         search = request.query_params.get('search')
-        show_completed = request.query_params.get('showCompleted')
+        show_completed = request.query_params.get('completed')
         
         order_by = sort_property
         if sort_direction == 'desc':

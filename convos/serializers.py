@@ -19,6 +19,7 @@ class ConvosSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'Convo'
+        data['headline'] = instance.title
 
         return data        
 
