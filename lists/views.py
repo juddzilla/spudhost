@@ -2,9 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import uuid
+from utils.sort_params import sort_params
 
 from .models import Lists
-from .serializers import (ListSerializer, ListsSerializer, ListUpdateSerializer)
+from .serializers import (GetListsSerializer, ListSerializer, ListsSerializer, ListUpdateSerializer)
 
 from list_items.models import ListItems
 from list_items.serializers import (ListItemUpdateSerializer, ListItemsSerializer)
@@ -16,10 +17,17 @@ def get_list_items(list):
     return list.listitems_set
 
 class ListsView(APIView):
-    def get(self, request, *args, **kwargs):        
-        lists = Lists.objects.filter(user=request.user.id).exclude(deleted=True).order_by('-created_at')
-        # list_items_count = get_list_items(list).all().exclude(deleted=True)
-        serialized = ListsSerializer(lists, many=True)
+    def get(self, request, *args, **kwargs):  
+        query_params = sort_params(request.query_params)                              
+        filter_args = {
+            'user': request.user.id
+        }
+
+        if query_params['search'] is not None:
+            filter_args['title__icontains'] = query_params['search']
+
+        lists = Lists.objects.filter(**filter_args).exclude(deleted=True).order_by(query_params['order_by'])        
+        serialized = GetListsSerializer(lists, many=True)
         response = {
             'total': 100,
             'results': serialized.data
@@ -103,6 +111,7 @@ class ListView(APIView):
         serialized = ListItemsSerializer(data=data, partial=True)    
 
         if serialized.is_valid():
+            list.save()
             serialized.save()
             return Response(
                 {'results': serialized.data},
@@ -119,6 +128,7 @@ class ListView(APIView):
         serialized = ListUpdateSerializer(list, data=data, partial=True)        
 
         if serialized.is_valid():
+            list.save()
             serialized.save()
             return Response({
                 **serialized.data,
@@ -141,6 +151,7 @@ class ListItemsView(APIView):
         serialized = ListItemsSerializer(list_items, many=True)
 
         if serialized.is_valid():
+            list.save()
             response = {
                 'results': serialized.data
             }
@@ -155,6 +166,7 @@ class ListItemView(APIView):
         serialized = ListItemUpdateSerializer(list_item, data=request.data, partial=True)
 
         if serialized.is_valid():
+            list.save()
             serialized.save()
             return Response({
                 **serialized.data,
@@ -168,6 +180,7 @@ class ListItemView(APIView):
         
         try:
             list_item.delete()
+            list.save()
             return Response(
                 {'removed': True}, 
                 status=status.HTTP_202_ACCEPTED

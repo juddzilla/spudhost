@@ -21,12 +21,32 @@ class ListsSerializer(serializers.ModelSerializer):
         
         # Add a key to the serialized data
         data['type'] = 'List'
-        data['children_count'] = instance.listitems_set.exclude(deleted=True).count()
+        
         data['headline'] = instance.title
-        data['subheadline'] = instance.title
+        data['subheadline'] = "0 Items"
 
         return data
 
+class GetListsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lists
+        fields = [
+            "title",            
+            "uuid",
+            "updated_at",
+        ] 
+
+    def to_representation(self, instance):
+        # Get the serialized data from the parent class
+        data = super().to_representation(instance)
+        
+        # Add a key to the serialized data
+        data['type'] = 'List'
+        
+        data['headline'] = instance.title
+        data['subheadline'] = f"{instance.listitems_set.exclude(deleted=True).count()} Items"
+
+        return data
 
 class ListSerializer(serializers.ModelSerializer):
     class Meta:

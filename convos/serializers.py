@@ -20,6 +20,7 @@ class ConvosSerializer(serializers.ModelSerializer):
         # Add a key to the serialized data
         data['type'] = 'Convo'
         data['headline'] = instance.title
+        data['subheadline'] = f"{instance.convomessages_set.count()} Messages"
 
         return data        
 
